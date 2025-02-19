@@ -49,12 +49,25 @@ app.put("/posts/:id", (req, res) => {
 app.delete("/posts/:id", (req, res) => {
   const deletedPostsId = parseInt(req.params.id);
   const index = posts.findIndex((p) => p.id === deletedPostsId);
-  if (index !== 1) {
+  if (index === -1) {
+    return res.status(404).json({ error: "Not Found" });
+  } else {
     posts.splice(index, 1);
     res.status(204).send();
+  }
+});
+
+app.get("/posts/:id", (req, res) => {
+  const getId = parseInt(req.params.id);
+  const index = posts.findIndex((p) => p.id === getId);
+  if (index !== -1) {
+    res.status(200).json(posts[index]);
   } else {
     res.status(404).json({ error: "Not Found" });
   }
+});
+app.get("/posts", (req, res) => {
+  res.status(200).json(posts);
 });
 
 app.listen(port, () => {
